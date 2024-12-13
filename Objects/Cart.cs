@@ -16,6 +16,7 @@ public class Cart : ICart
 
     public void BuyProduct(IProduct product, ICustomer customer)
     {
+        
         customer.WithdrawBalance(product.GetPrice());
         
         if (_purchases.ContainsKey(product.GetName())) {

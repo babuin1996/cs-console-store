@@ -12,14 +12,12 @@ public class Product : IProduct
     private int Id { get; }
     private string Name { get; }
     private decimal Price { get; }
-    private int Quantity { get; }
     
-    public Product(string name, decimal price, int quantity, int id)
+    public Product(string name, decimal price, int id)
     {
         Id = id;
         Name = name;
         Price = price;
-        Quantity = quantity;
     }
 
     public int GetId()
@@ -35,11 +33,6 @@ public class Product : IProduct
     public decimal GetPrice()
     {
         return Price;
-    }
-
-    public int GetQuantity()
-    {
-        return Quantity;
     }
 
     public List<string> GetKinds()

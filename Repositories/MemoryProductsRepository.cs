@@ -15,7 +15,6 @@ class MemoryProductsRepository : IProductsRepository
             _products.Add(new Product(
                 productName,
                 GetProductPrice(),
-                GetProductQuantity(),
                 GetProductId()
                 ));
         }
@@ -29,11 +28,6 @@ class MemoryProductsRepository : IProductsRepository
     private decimal GetProductPrice()
     {
         return new decimal(double.Round(_random.NextDouble() * 5, 2));
-    }
-
-    private int GetProductQuantity()
-    {
-        return _random.Next(1, 10);
     }
 
     private int GetProductId()

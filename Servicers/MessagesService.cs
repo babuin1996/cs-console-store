@@ -11,7 +11,6 @@ public class MessagesService
         foreach (IProduct product in products)
         {
             message += $"\nНазвание товара: {product.GetName()} (ID: {product.GetId()})\n" +
-                       $"В наличии шт.: {product.GetQuantity()}\n" +
                        $"Цена товара: {product.GetPrice()} usd\n";
             
         }
