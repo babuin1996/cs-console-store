@@ -1,5 +1,6 @@
 ﻿using console_store.Objects;
 using console_store.Repositories;
+using console_store.Servicers;
 
 namespace console_store;
 
@@ -7,19 +8,38 @@ class Program
 {
     static void Main(string[] args)
     {
-        var repository = GetRepository();
-        var products = repository.GetProducts();
-        var customer = new Customer();
-        var cart = new Cart();
+        IProductsRepository repository = GetRepository();
+        List<IProduct> products = repository.GetProducts();
+        ICustomer customer = new Customer();
+        Cart cart = new Cart();
+        
+        MessagesService.ShowInstructions();
+        MessagesService.ShowAvailableProducts(products);
+        MessagesService.ShowCustomerBalance(customer);
+        MessagesService.ShowCartInfo(cart);
 
-        try {
-            ShowAvailableProducts(products);
-        } catch (Exception e) {
-            Console.WriteLine(e);
-            throw;
-        } finally {
-            ShowCustomerBalance(customer);
-            ShowCartInfo(cart);
+        while (true)
+        {
+            string? input = Console.ReadLine();
+            if (input == null) continue;
+            
+            int inputCode = int.Parse(input);
+            if (inputCode == 0) return;
+
+            try {
+                IProduct? product = FindProductById(products, inputCode);
+
+                if (product == null) {
+                    throw new Exception($"Продукт с ID {inputCode} не найден");
+                }
+                    
+                cart.BuyProduct(product, customer);
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+            } finally {
+                MessagesService.ShowCustomerBalance(customer);
+                MessagesService.ShowCartInfo(cart);
+            }
         }
     }
 
@@ -28,44 +48,8 @@ class Program
         return new MemoryProductsRepository();
     }
 
-    private static void ShowAvailableProducts(List<IProduct> products)
+    private static IProduct? FindProductById(List<IProduct> products, int productId)
     {
-        string message = "Товары в наличии:\n";
-        
-        foreach (IProduct product in products)
-        {
-            message += $"\nНазвание товара: {product.GetName()}\n" +
-                             $"В наличии шт.: {product.GetQuantity()}\n" +
-                             $"Цена товара: {product.GetPrice()} usd\n";
-            
-        }
-        
-        Console.WriteLine(message);
-    }
-
-    private static void ShowCustomerBalance(ICustomer customer)
-    {
-        string message = $"Ваш баланс: {customer.GetBalance()}";
-            
-        Console.WriteLine(message);
-    }
-
-    private static void ShowCartInfo(ICart cart)
-    {
-        string message = "";
-
-        if (cart.GetPurchases().Count > 0) {
-            foreach (KeyValuePair<string, int> kind in cart.GetPurchases())
-            {
-                message += $"Название товара: {kind.Key}\n" +
-                           $"В наличии шт.: {kind.Value}\n";
-
-            }
-        } else
-        {
-            message = "Вы пока что не совершили ни одной покупки";
-        }
-        
-        Console.WriteLine(message);
+        return products.Find(product => product.GetId() == productId);
     }
 }

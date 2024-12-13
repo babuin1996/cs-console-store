@@ -14,8 +14,10 @@ public class Cart : ICart
         return _purchases;
     }
 
-    public void AddProduct(IProduct product)
+    public void BuyProduct(IProduct product, ICustomer customer)
     {
+        customer.WithdrawBalance(product.GetPrice());
+        
         if (_purchases.ContainsKey(product.GetName())) {
             _purchases[product.GetName()]++;
         } else {

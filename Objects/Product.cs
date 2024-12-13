@@ -9,15 +9,22 @@ public class Product : IProduct
         "Киви"
     ];
     
+    private int Id { get; }
     private string Name { get; }
     private decimal Price { get; }
     private int Quantity { get; }
     
-    public Product(string name, decimal price, int quantity)
+    public Product(string name, decimal price, int quantity, int id)
     {
+        Id = id;
         Name = name;
         Price = price;
         Quantity = quantity;
+    }
+
+    public int GetId()
+    {
+        return Id;
     }
 
     public string GetName()

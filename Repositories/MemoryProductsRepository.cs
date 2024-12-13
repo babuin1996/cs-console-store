@@ -6,6 +6,7 @@ class MemoryProductsRepository : IProductsRepository
 {
     private readonly Random _random = new();
     private readonly List<IProduct> _products = [];
+    private int _nextId = 1;
 
     public MemoryProductsRepository()
     {
@@ -14,7 +15,8 @@ class MemoryProductsRepository : IProductsRepository
             _products.Add(new Product(
                 productName,
                 GetProductPrice(),
-                GetProductQuantity()
+                GetProductQuantity(),
+                GetProductId()
                 ));
         }
     }
@@ -32,5 +34,10 @@ class MemoryProductsRepository : IProductsRepository
     private int GetProductQuantity()
     {
         return _random.Next(1, 10);
+    }
+
+    private int GetProductId()
+    {
+        return _nextId++;
     }
 }
